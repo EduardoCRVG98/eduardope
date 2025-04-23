@@ -1,0 +1,60 @@
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { MapPin, Camera, AlertTriangle } from "lucide-react";
+
+export default function CrimePreventionApp() {
+  const [report, setReport] = useState("");
+  const [reports, setReports] = useState([]);
+
+  const handleSubmit = () => {
+    if (report.trim() !== "") {
+      setReports([...reports, { text: report, timestamp: new Date() }]);
+      setReport("");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-4">
+      <h1 className="text-3xl font-bold mb-4 text-center">Crime Prevention App</h1>
+
+      <Card className="max-w-xl mx-auto mb-4">
+        <CardContent className="p-4">
+          <h2 className="text-xl font-semibold mb-2 flex items-center">
+            <AlertTriangle className="mr-2 text-red-500" /> Send Anonymous Report
+          </h2>
+          <Input
+            placeholder="Describe suspicious activity..."
+            value={report}
+            onChange={(e) => setReport(e.target.value)}
+            className="mb-2"
+          />
+          <Button onClick={handleSubmit}>Submit Report</Button>
+        </CardContent>
+      </Card>
+
+      <Card className="max-w-xl mx-auto">
+        <CardContent className="p-4">
+          <h2 className="text-xl font-semibold mb-2 flex items-center">
+            <MapPin className="mr-2 text-blue-500" /> Recent Reports
+          </h2>
+          {reports.length === 0 ? (
+            <p className="text-gray-500">No reports yet.</p>
+          ) : (
+            <ul className="space-y-2">
+              {reports.map((r, i) => (
+                <li key={i} className="bg-white p-3 rounded shadow">
+                  <p>{r.text}</p>
+                  <span className="text-xs text-gray-400">
+                    {r.timestamp.toLocaleString()}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
